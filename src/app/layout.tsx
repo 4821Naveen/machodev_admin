@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Placement-Ready Portfolio Program | MachoDev",
   description: "Build your professional portfolio, resume, and LinkedIn profile for campus placements.",
+  icons: {
+    icon: "Macho_Logo_256X256.svg",
+  },
 };
 
 export default function RootLayout({
