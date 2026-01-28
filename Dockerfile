@@ -15,8 +15,8 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
-EXPOSE 3383
-ENV PORT 3383
+EXPOSE 83
+ENV PORT 83
 ENV NODE_ENV production
 
 CMD ["npm", "start"]
