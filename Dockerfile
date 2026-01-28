@@ -19,4 +19,5 @@ EXPOSE 83
 ENV PORT 83
 ENV NODE_ENV production
 
-CMD ["npm", "start"]
+CMD ["npm", "start", "--", "-H", "0.0.0.0", "-p", "83"]
+
