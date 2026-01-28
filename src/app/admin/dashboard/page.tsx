@@ -176,10 +176,10 @@ export default function AdminDashboard() {
                             <thead>
                                 <tr className="border-b border-white/5 bg-white/[0.03]">
                                     <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Student</th>
-                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Details</th>
-                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">College</th>
-                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Status</th>
-                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Registered</th>
+                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Skills & Goal</th>
+                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Education</th>
+                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Selection</th>
+                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase text-right">Registered</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/[0.02]">
@@ -187,33 +187,45 @@ export default function AdminDashboard() {
                                     <tr key={reg.id} className="group hover:bg-white/[0.02] transition-colors">
                                         <td className="px-8 py-8">
                                             <div className="flex flex-col">
-                                                <span className="font-heading text-sm tracking-widest text-primary mb-1 uppercase">{reg.full_name}</span>
+                                                <span className="font-heading text-sm tracking-widest text-primary mb-1 uppercase leading-tight">{reg.full_name}</span>
                                                 <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{reg.email_id}</span>
+                                                <span className="text-[10px] text-gray-600 font-medium mt-1 uppercase tracking-widest">{reg.mobile_number}</span>
                                             </div>
                                         </td>
                                         <td className="px-8 py-8">
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-xs text-gray-300">{reg.mobile_number}</span>
-                                                <span className="text-[10px] text-gray-500 font-medium uppercase tracking-[0.2em]">{reg.career_goal}</span>
+                                            <div className="flex flex-col gap-3">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {(reg.skills || "").split(',').map((skill: string, i: number) => (
+                                                        skill.trim() && (
+                                                            <span key={i} className="text-[9px] bg-white/5 border border-white/10 text-gray-400 px-2 py-0.5 rounded uppercase tracking-wider font-bold">
+                                                                {skill.trim()}
+                                                            </span>
+                                                        )
+                                                    ))}
+                                                </div>
+                                                <span className="text-[10px] text-primary/60 font-medium uppercase tracking-[0.2em] font-heading">{reg.career_goal}</span>
                                             </div>
                                         </td>
                                         <td className="px-8 py-8">
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-xs text-gray-300 font-medium">{reg.college_name}</span>
-                                                <span className="text-[10px] text-gray-500 uppercase tracking-widest">{reg.degree_dept} • {reg.year_of_study}</span>
+                                            <div className="flex flex-col gap-1.5">
+                                                <span className="text-xs text-gray-300 font-medium leading-relaxed">{reg.college_name}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[10px] text-gray-500 uppercase tracking-widest border-r border-white/10 pr-2">{reg.degree_dept}</span>
+                                                    <span className="text-[10px] text-primary/40 font-bold uppercase tracking-tighter">{reg.year_of_study}</span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="px-8 py-8">
                                             {reg.is_selected ? (
-                                                <span className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border border-primary/20 shadow-[0_0_10px_rgba(151,254,92,0.1)]">
-                                                    <Star size={12} fill="currentColor" /> Selected
-                                                </span>
+                                                <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border border-primary/20 shadow-[0_0_15px_rgba(151,254,92,0.1)]">
+                                                    <Star size={10} fill="currentColor" /> Selected
+                                                </div>
                                             ) : (
-                                                <span className="text-gray-700 text-[10px] font-bold uppercase tracking-widest">Waitlisted</span>
+                                                <span className="text-gray-700 text-[10px] font-bold uppercase tracking-widest pl-4">Waitlisted</span>
                                             )}
                                         </td>
-                                        <td className="px-8 py-8">
-                                            <span className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">
+                                        <td className="px-8 py-8 text-right">
+                                            <span className="text-[10px] text-gray-700 font-bold uppercase tracking-widest">
                                                 {new Date(reg.created_at).toLocaleDateString()}
                                             </span>
                                         </td>
