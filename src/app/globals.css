@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Azonix';
+  src: url('https://fonts.cdnfonts.com/s/16327/Azonix.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme inline {
+  --color-primary: #97fe5c;
+  --color-background: #030014;
+  --color-foreground: #ededed;
+
+  --font-display: 'Azonix', 'Orbitron', sans-serif;
+}
+
+:root {
+  --background: #030014;
+  --foreground: #ededed;
+  --primary: #97fe5c;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  @apply antialiased;
+}
+
+.font-heading {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.tamil-text {
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+.btn-primary {
+  @apply bg-primary text-black font-bold py-4 px-8 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2;
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(151, 254, 92, 0.5);
+}
+
+.border-glow {
+  box-shadow: 0 0 20px rgba(151, 254, 92, 0.2);
+}
