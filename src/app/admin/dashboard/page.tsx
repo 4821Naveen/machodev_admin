@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Download, Users, Star, Trophy, Loader2, ArrowLeft, RefreshCcw, ToggleLeft, ToggleRight, FileSpreadsheet } from "lucide-react";
+import { Download, Users, Star, Trophy, Loader2, ArrowLeft, RefreshCcw, ToggleLeft, ToggleRight, FileSpreadsheet, Trash2 } from "lucide-react";
 import axios from "axios";
 
 export default function AdminDashboard() {
@@ -12,6 +12,35 @@ export default function AdminDashboard() {
     const [settings, setSettings] = useState<any>({});
     const [selecting, setSelecting] = useState(false);
     const [toggling, setToggling] = useState(false);
+    const [deleting, setDeleting] = useState<number | null>(null);
+
+
+    const deleteRegistration = async (id: number) => {
+        if (!confirm("Are you sure you want to delete this registration?")) return;
+        setDeleting(id);
+        try {
+            await axios.delete(`/api/admin?id=${id}`);
+            await fetchData();
+        } catch (err) {
+            alert("Failed to delete registration.");
+        } finally {
+            setDeleting(null);
+        }
+    };
+
+    const deleteAllRegistrations = async () => {
+        if (!confirm("CRITICAL: This will delete ALL registrations permanently. Continue?")) return;
+        setLoading(true);
+        try {
+            await axios.delete("/api/admin?action=DELETE_ALL");
+            await fetchData();
+            alert("All registrations cleared.");
+        } catch (err) {
+            alert("Failed to clear registrations.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         const isAuth = localStorage.getItem("admin_session");
@@ -153,11 +182,17 @@ export default function AdminDashboard() {
 
                     <div className="flex flex-wrap gap-4 w-full md:w-auto">
                         <button
+                            onClick={deleteAllRegistrations}
+                            className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-6 py-4 rounded-2xl border border-red-500/20 text-[10px] font-heading tracking-widest uppercase transition-all flex items-center gap-2"
+                        >
+                            <Trash2 size={16} /> Clear All
+                        </button>
+                        <button
                             onClick={exportToCSV}
                             className="btn-primary !bg-white/5 hover:!bg-white/10 !text-white !border-white/10 !py-4 !px-8 !text-[10px] !uppercase !tracking-widest flex-1 md:flex-none"
                         >
                             <FileSpreadsheet size={16} />
-                            Export to Excel
+                            Export
                         </button>
                         <button
                             onClick={selectWinners}
@@ -165,7 +200,7 @@ export default function AdminDashboard() {
                             className="btn-primary !py-4 !px-8 !text-[10px] !uppercase !tracking-widest flex-1 md:flex-none shadow-[0_0_20px_rgba(151,254,92,0.2)]"
                         >
                             {selecting ? <Loader2 className="animate-spin" size={16} /> : <Trophy size={16} />}
-                            Select 5 Random Winners
+                            Select Winners
                         </button>
                     </div>
                 </header>
@@ -178,8 +213,8 @@ export default function AdminDashboard() {
                                     <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Student</th>
                                     <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Skills & Goal</th>
                                     <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Education</th>
-                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Selection</th>
-                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase text-right">Registered</th>
+                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase">Status</th>
+                                    <th className="px-8 py-6 font-heading text-[10px] tracking-widest text-gray-500 uppercase text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/[0.02]">
@@ -225,9 +260,18 @@ export default function AdminDashboard() {
                                             )}
                                         </td>
                                         <td className="px-8 py-8 text-right">
-                                            <span className="text-[10px] text-gray-700 font-bold uppercase tracking-widest">
-                                                {new Date(reg.created_at).toLocaleDateString()}
-                                            </span>
+                                            <div className="flex items-center justify-end gap-4">
+                                                <span className="text-[10px] text-gray-700 font-bold uppercase tracking-widest mr-4">
+                                                    {new Date(reg.created_at).toLocaleDateString()}
+                                                </span>
+                                                <button
+                                                    onClick={() => deleteRegistration(reg.id)}
+                                                    disabled={deleting === reg.id}
+                                                    className="p-3 text-red-500/40 hover:text-red-500 bg-red-500/0 hover:bg-red-500/10 rounded-xl transition-all"
+                                                >
+                                                    {deleting === reg.id ? <Loader2 className="animate-spin" size={16} /> : <Trash2 size={16} />}
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

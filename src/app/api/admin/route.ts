@@ -44,3 +44,26 @@ export async function PUT(request: Request) {
         return NextResponse.json({ error: 'Failed to perform action' }, { status: 500 });
     }
 }
+
+export async function DELETE(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    const action = searchParams.get('action');
+
+    try {
+        if (action === 'DELETE_ALL') {
+            await query('DELETE FROM registrations');
+            return NextResponse.json({ message: 'All registrations deleted' });
+        }
+
+        if (id) {
+            await query('DELETE FROM registrations WHERE id = $1', [id]);
+            return NextResponse.json({ message: 'Registration deleted' });
+        }
+
+        return NextResponse.json({ error: 'Missing ID or action' }, { status: 400 });
+    } catch (err: any) {
+        console.error('Delete error:', err);
+        return NextResponse.json({ error: 'Failed to delete data' }, { status: 500 });
+    }
+}
