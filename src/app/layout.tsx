@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "Macho_Logo_256X256.svg",
   },
+  verification: {
+    google: "zmvh4QrMJ99UIIR8RmFnyWn6rI_wx-PekU3SEyJz5jI",
+  },
 };
 
 export default function RootLayout({
